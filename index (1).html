@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mirrex — удалённый рабочий стол</title>
+<meta name="description" content="Mirrex — удалённый доступ к компьютеру: быстро, зашифровано и без сложных настроек. Скачайте для Windows.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%234F8BFF'/%3E%3Cstop offset='1' stop-color='%238B5CF6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Crect x='14' y='16' width='36' height='24' rx='5' fill='none' stroke='white' stroke-width='4'/%3E%3Cpath d='M32 40v7M24 48h16' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ====== Настройки: поменяйте ссылку на ваш exe и версию ====== */
+  :root{
+    --bg:#0E1015;
+    --bg-2:#13161D;
+    --card:#191C24;
+    --card-2:#1F232D;
+    --line:#2A2F3B;
+    --text:#EEF0F5;
+    --muted:#9AA1B2;
+    --blue:#4F8BFF;
+    --violet:#8B5CF6;
+    --grad:linear-gradient(135deg,#4F8BFF 0%,#8B5CF6 100%);
+    --radius:20px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;overflow-x:clip}
+  body{position:relative}
+  body{
+    font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    background:var(--bg);color:var(--text);line-height:1.5;
+    -webkit-font-smoothing:antialiased;overflow-x:clip;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+
+  /* фоновое свечение как на баннерах */
+  .glows{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+  .glow{position:absolute;pointer-events:none;border-radius:50%;filter:blur(90px);opacity:.55;z-index:0}
+  .glow.g1{width:620px;height:620px;right:-140px;top:-160px;background:radial-gradient(circle,#24345E 0%,transparent 70%)}
+  .glow.g2{width:560px;height:560px;left:-220px;top:380px;background:radial-gradient(circle,#2A1F4A 0%,transparent 70%)}
+  .glow.g3{width:700px;height:700px;right:10%;top:1500px;background:radial-gradient(circle,#1F2A52 0%,transparent 70%)}
+
+  /* ===== Шапка ===== */
+  header{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    background:rgba(14,16,21,.72);border-bottom:1px solid rgba(42,47,59,.6)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:72px}
+  .logo{display:flex;align-items:center;gap:12px;font-weight:700;font-size:22px;letter-spacing:-.02em}
+  .logo-icon{width:40px;height:40px;border-radius:12px;background:var(--grad);display:grid;place-items:center;flex:none}
+  .logo-icon svg{width:22px;height:22px}
+  .nav-links{display:flex;gap:32px;color:var(--muted);font-size:15px;font-weight:500}
+  .nav-links a:hover{color:var(--text)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;cursor:pointer;
+    font:inherit;font-weight:700;border-radius:14px;white-space:nowrap;transition:transform .15s ease,box-shadow .2s ease,opacity .2s}
+  .btn-primary{background:var(--grad);color:#fff;box-shadow:0 10px 30px -10px rgba(110,110,255,.6)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px -12px rgba(120,110,255,.75)}
+  .btn-sm{padding:10px 18px;font-size:14px;border-radius:12px}
+  .btn-lg{padding:20px 34px;font-size:19px;border-radius:18px}
+  .btn-ghost{background:var(--card);color:var(--text);border:1px solid var(--line)}
+  .btn-ghost:hover{background:var(--card-2)}
+  .btn svg{width:20px;height:20px;flex:none}
+
+  /* ===== Hero ===== */
+  .hero{position:relative;padding:72px 0 96px}
+  .hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center}
+  .pill{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:999px;background:var(--card);
+    border:1px solid var(--line);color:var(--muted);font-size:15px;font-weight:500}
+  .pill .dot{width:8px;height:8px;border-radius:50%;background:#3DDC97;box-shadow:0 0 10px #3DDC97}
+  h1{font-size:clamp(46px,6.6vw,88px);line-height:1.02;letter-spacing:-.045em;font-weight:800;margin:26px 0 24px}
+  .grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lead{font-size:clamp(18px,1.6vw,22px);color:var(--muted);max-width:560px}
+  .cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:38px}
+  .cta-meta{margin-top:16px;color:var(--muted);font-size:14px}
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:40px}
+  .chip{padding:10px 18px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-weight:600;font-size:15px}
+
+  /* иллюстрация Хост → Гость */
+  .illu{position:relative;height:470px}
+  .unit{position:absolute;display:flex;flex-direction:column;align-items:center}
+  .u-host{left:0;top:20px;width:55%}
+  .u-guest{right:0;top:150px;width:41%}
+  .screen{position:relative;width:100%;background:var(--card);border-radius:22px;padding:26px}
+  .screen .bar{height:12px;border-radius:6px;background:#2C313D;margin-bottom:14px}
+  .screen .bar.short{width:40%}
+  .screen .bar.mid{width:85%;height:9px;background:#252A35}
+  .screen .bar.mid2{width:65%;height:9px;background:#252A35}
+  .screen .tiles{display:flex;gap:14px;margin-top:28px}
+  .tile{flex:1;height:96px;border-radius:14px;background:#252A35;position:relative}
+  .tile.accent{background:var(--grad)}
+  .u-host .screen{border:2px solid var(--line)}
+  .stand i{display:block;margin:0 auto;width:40px;height:20px;background:#1A1D25;border:2px solid var(--line);border-top:0}
+  .stand b{display:block;width:100px;height:12px;border-radius:8px;background:#1A1D25;border:2px solid var(--line)}
+  .u-guest .screen{border:2.5px solid var(--blue);box-shadow:0 0 0 6px rgba(79,139,255,.08),0 30px 60px -20px rgba(0,0,0,.6)}
+  .u-guest .tile{height:84px}
+  .cursor{position:absolute;left:38%;top:24%;width:34px;filter:drop-shadow(0 4px 6px rgba(0,0,0,.4));animation:move 5s ease-in-out infinite}
+  @keyframes move{0%,100%{transform:translate(0,0)}35%{transform:translate(-22px,8px)}70%{transform:translate(8px,-6px)}}
+  .tag{margin-top:26px;padding:8px 22px;border-radius:999px;font-weight:700;font-size:16px;background:#14171E}
+  .u-host .tag{border:2px solid var(--line)}
+  .u-guest .tag{border:2px solid var(--blue);margin-top:22px}
+  .link-dots{position:absolute;left:calc(55% - 6px);top:160px;width:5%;min-width:34px;height:auto;z-index:2;overflow:visible}
+  .link-dots circle{fill:var(--blue)}
+  .link-dots path{stroke:var(--blue);stroke-width:4;stroke-linecap:round;fill:none;stroke-dasharray:2 10;animation:flow 1.2s linear infinite}
+  @keyframes flow{to{stroke-dashoffset:-24}}
+
+  /* ===== Секции ===== */
+  section{position:relative}
+  .sec{padding:96px 0}
+  .sec-head{position:relative;z-index:1;max-width:720px;margin-bottom:52px}
+  .eyebrow{color:var(--blue);font-weight:700;font-size:14px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
+  h2{font-size:clamp(34px,4.2vw,56px);line-height:1.08;letter-spacing:-.035em;font-weight:800}
+  .sec-head p{color:var(--muted);font-size:19px;margin-top:18px}
+
+  .features{position:relative;z-index:1;display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .feat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px;transition:transform .2s,border-color .2s}
+  .feat:hover{transform:translateY(-4px);border-color:#3A4156}
+  .ico{width:48px;height:48px;border-radius:14px;background:rgba(79,139,255,.12);display:grid;place-items:center;margin-bottom:22px}
+  .ico svg{width:24px;height:24px;stroke:url(#ig);}
+  .feat h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:8px}
+  .feat p{color:var(--muted);font-size:15px}
+  .feat.wide{grid-column:span 2;display:flex;flex-direction:column;justify-content:space-between;
+    background:linear-gradient(160deg,#1C2232 0%,var(--card) 60%)}
+
+  .steps{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:34px 32px 38px}
+  .num{font-size:56px;font-weight:800;line-height:1;letter-spacing:-.04em;margin-bottom:26px}
+  .s1 .num{color:#4F8BFF}.s2 .num{color:#6E74F8}.s3 .num{color:#8B5CF6}
+  .step h3{font-size:23px;font-weight:700;letter-spacing:-.02em;line-height:1.25;margin-bottom:12px}
+  .step p{color:var(--muted);font-size:16px}
+
+  .roles{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+  .role{display:flex;gap:20px;align-items:flex-start;background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius);padding:26px 28px}
+  .role .badge{flex:none;padding:7px 18px;border-radius:999px;font-weight:700;font-size:15px;border:2px solid var(--line)}
+  .role.g .badge{border-color:var(--blue)}
+  .role p{color:var(--muted);font-size:16px}
+  .role strong{color:var(--text)}
+
+  /* ===== Скачать ===== */
+  .download{position:relative;z-index:1;border-radius:32px;padding:64px;overflow:hidden;
+    background:radial-gradient(120% 140% at 100% 0%,#26305A 0%,transparent 55%),radial-gradient(90% 120% at 0% 100%,#2A1F4A 0%,transparent 60%),var(--card);
+    border:1px solid var(--line);display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:center}
+  .download h2{margin-bottom:16px}
+  .download .sub{color:var(--muted);font-size:19px;max-width:520px}
+  .platforms{display:flex;flex-direction:column;gap:14px}
+  .plat{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 24px;border-radius:20px;
+    background:rgba(14,16,21,.55);border:1px solid var(--line)}
+  .plat .l{display:flex;align-items:center;gap:16px}
+  .plat .os{width:46px;height:46px;border-radius:12px;background:var(--card-2);display:grid;place-items:center}
+  .plat .os svg{width:24px;height:24px;fill:var(--text)}
+  .plat b{display:block;font-size:17px}
+  .plat small{color:var(--muted);font-size:14px}
+  .plat.soon{opacity:.6}
+  .soon-tag{padding:7px 14px;border-radius:999px;border:1px solid var(--line);color:var(--muted);font-size:13px;font-weight:600;white-space:nowrap}
+  .reqs{margin-top:28px;display:flex;flex-wrap:wrap;gap:10px 22px;color:var(--muted);font-size:14px}
+  .reqs span::before{content:"✓ ";color:#3DDC97;font-weight:700}
+
+  .note{margin-top:22px;display:flex;gap:14px;align-items:flex-start;padding:18px 20px;border-radius:16px;background:rgba(79,139,255,.08);border:1px solid rgba(79,139,255,.25);font-size:14.5px;color:#C9D3EA}
+  .note svg{width:20px;height:20px;flex:none;margin-top:1px;stroke:var(--blue)}
+
+  /* ===== FAQ ===== */
+  .faq{position:relative;z-index:1;max-width:860px}
+  details{border-bottom:1px solid var(--line)}
+  summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:26px 4px;font-size:20px;font-weight:600;letter-spacing:-.01em}
+  summary::-webkit-details-marker{display:none}
+  summary .pm{flex:none;width:34px;height:34px;border-radius:50%;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;transition:transform .25s}
+  details[open] summary .pm{transform:rotate(45deg);background:var(--grad);border-color:transparent}
+  details p{color:var(--muted);font-size:17px;padding:0 4px 26px;max-width:740px}
+
+  footer{border-top:1px solid var(--line);padding:40px 0;color:var(--muted);font-size:14px;position:relative;z-index:1}
+  .foot{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+  .foot .logo{font-size:18px;color:var(--text)}
+  .foot .logo-icon{width:32px;height:32px;border-radius:10px}
+  .foot .logo-icon svg{width:18px;height:18px}
+
+  /* появление при прокрутке */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+
+  /* ===== Анимации ===== */
+  /* появление первого экрана по очереди */
+  .hero .anim{opacity:0;transform:translateY(22px);animation:up .8s cubic-bezier(.2,.7,.2,1) forwards}
+  .hero .a1{animation-delay:.05s}.hero .a2{animation-delay:.15s}.hero .a3{animation-delay:.3s}
+  .hero .a4{animation-delay:.45s}.hero .a5{animation-delay:.6s}
+  .illu.anim{animation:upScale 1s cubic-bezier(.2,.7,.2,1) .35s forwards;transform:translateY(30px) scale(.96)}
+  @keyframes up{to{opacity:1;transform:none}}
+  @keyframes upScale{to{opacity:1;transform:none}}
+
+  /* экраны плавно парят */
+  .u-host .screen,.u-host .stand{animation:float 7s ease-in-out infinite}
+  .u-guest .screen{animation:float 6s ease-in-out -2s infinite}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+  /* пульсирующая рамка Гостя — «идёт сеанс» */
+  .u-guest .screen::after{content:"";position:absolute;inset:-3px;border-radius:24px;border:2px solid var(--blue);opacity:0;animation:ring 3s ease-out infinite}
+  @keyframes ring{0%{opacity:.7;transform:scale(1)}100%{opacity:0;transform:scale(1.08)}}
+
+  /* переливающийся градиент в заголовке */
+  .grad-text{background:linear-gradient(90deg,#4F8BFF,#8B5CF6,#4F8BFF);background-size:200% auto;
+    -webkit-background-clip:text;background-clip:text;color:transparent;animation:shift 6s linear infinite}
+  @keyframes shift{to{background-position:200% center}}
+
+  /* блик на кнопках */
+  .btn-primary{position:relative;overflow:hidden}
+  .btn-primary::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);animation:shine 4s ease-in-out infinite}
+  @keyframes shine{0%,60%{left:-60%}100%{left:130%}}
+
+  /* мигающая точка «онлайн» */
+  .pill .dot{animation:blink 2s ease-in-out infinite}
+  @keyframes blink{50%{opacity:.35;box-shadow:0 0 2px #3DDC97}}
+
+  /* фоновое свечение медленно дышит */
+  .glow{animation:breathe 12s ease-in-out infinite}
+  .glow.g2{animation-delay:-4s}.glow.g3{animation-delay:-8s}
+  @keyframes breathe{50%{opacity:.85;transform:scale(1.12)}}
+
+  /* подсветка карточек за курсором */
+  .feat,.step,.plat{position:relative;overflow:hidden}
+  .feat::before,.step::before{content:"";position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none;
+    background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%),rgba(110,116,248,.16),transparent 60%)}
+  .feat:hover::before,.step:hover::before{opacity:1}
+  .feat > *,.step > *{position:relative}
+  .ico{transition:transform .3s}
+  .feat:hover .ico{transform:scale(1.1) rotate(-6deg)}
+  .step{transition:transform .25s,border-color .25s}
+  .step:hover{transform:translateY(-4px);border-color:#3A4156}
+
+  /* шапка уплотняется при прокрутке */
+  header{transition:background .3s,box-shadow .3s}
+  header.scrolled{background:rgba(14,16,21,.9);box-shadow:0 10px 30px -15px rgba(0,0,0,.6)}
+
+  /* полоса прогресса прокрутки */
+  .progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--grad);z-index:60}
+
+  /* плавное раскрытие ответов */
+  details p{animation:none}
+  details[open] p{animation:up .4s ease forwards;opacity:0;transform:translateY(-6px)}
+
+  /* ===== Адаптив ===== */
+  @media (max-width:1024px){
+    .features{grid-template-columns:repeat(2,1fr)}
+    .download{grid-template-columns:1fr;padding:44px}
+  }
+  @media (max-width:880px){
+    .hero-grid{grid-template-columns:1fr}
+    .illu{height:420px;max-width:560px;margin:0 auto;width:100%}
+    .nav-links{display:none}
+    .steps,.roles{grid-template-columns:1fr}
+  }
+  @media (max-width:560px){
+    .wrap{padding:0 20px}
+    .hero{padding:44px 0 64px}
+    .sec{padding:72px 0}
+    .features{grid-template-columns:1fr}
+    .feat.wide{grid-column:auto}
+    .illu{height:340px}
+    .screen{padding:16px;border-radius:16px}
+    .screen .tiles{margin-top:16px;gap:10px}
+    .tile{height:62px}.u-guest .tile{height:52px}
+    .stand b{width:70px}
+    .tag{font-size:13px;padding:6px 16px;margin-top:16px}
+    .link-dots{top:100px}
+    .u-guest{top:96px}
+    .cursor{width:24px}
+    .download{padding:30px 22px;border-radius:24px}
+    .btn-lg{width:100%}
+    .plat{flex-direction:column;align-items:stretch}
+    .plat .btn{width:100%}
+    summary{font-size:18px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .reveal,.hero .anim,.illu.anim{opacity:1!important;transform:none!important}
+  }
+</style>
+</head>
+<body>
+<div class="progress" aria-hidden="true"></div>
+
+<!-- градиент для иконок -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs><linearGradient id="ig" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4F8BFF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs>
+</svg>
+
+<div class="glows" aria-hidden="true"><div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div></div>
+
+<header>
+  <div class="wrap nav">
+    <a href="#top" class="logo" aria-label="Mirrex">
+      <span class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="4" width="18" height="12" rx="3"/><path d="M12 16v4M8 20h8"/></svg></span>
+      Mirrex
+    </a>
+    <nav class="nav-links">
+      <a href="#features">Возможности</a>
+      <a href="#how">Как это работает</a>
+      <a href="#faq">Вопросы</a>
+    </nav>
+    <a href="#download" class="btn btn-primary btn-sm">Скачать</a>
+  </div>
+</header>
+
+<main id="top">
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="pill anim a1"><span class="dot"></span>Удалённый рабочий стол</span>
+        <h1 class="anim a2">Ваш рабочий стол — <span class="grad-text">там, где вы</span></h1>
+        <p class="lead anim a3">Подключайтесь к своему компьютеру из любой точки: быстро, зашифровано и без сложных настроек.</p>
+        <div class="cta-row anim a4">
+          <a class="btn btn-primary btn-lg js-download" href="#">
+            <svg viewBox="0 0 24 24" fill="#fff"><path d="M3 5.5 10.5 4.5v7H3v-6Zm0 13 7.5 1v-7H3v6Zm8.5 1.2L21 21v-8.5h-9.5v7.2Zm0-15.4v7.2H21V3l-9.5 1.3Z"/></svg>
+            Скачать для Windows
+          </a>
+          <a class="btn btn-ghost btn-lg" href="#how">Как это работает</a>
+        </div>
+        <p class="cta-meta anim a5">Windows 10 / 11 · <span class="js-version"></span> · установка не нужна</p>
+      </div>
+
+      <div class="illu anim" aria-hidden="true" style="opacity:0">
+        <div class="unit u-host">
+          <div class="screen">
+            <div class="bar short"></div><div class="bar mid"></div><div class="bar mid2"></div>
+            <div class="tiles"><div class="tile accent"></div><div class="tile"></div></div>
+          </div>
+          <div class="stand"><i></i><b></b></div>
+          <span class="tag">Хост</span>
+        </div>
+        <svg class="link-dots" viewBox="0 0 60 40"><circle cx="6" cy="8" r="6"/><path d="M14 10 Q36 14 52 34"/></svg>
+        <div class="unit u-guest">
+          <div class="screen">
+            <div class="bar short"></div><div class="bar mid"></div><div class="bar mid2"></div>
+            <div class="tiles"><div class="tile"></div><div class="tile accent">
+              <svg class="cursor" viewBox="0 0 24 24"><path d="M4 2 4 20 9 15 12.5 22 15.5 20.6 12 13.8 19 13.8Z" fill="#fff" stroke="#0E1015" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            </div></div>
+          </div>
+          <span class="tag">Гость</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ВОЗМОЖНОСТИ ===== -->
+  <section class="sec" id="features">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="eyebrow">Возможности</div>
+        <h2>Всё, что нужно для работы на расстоянии</h2>
+        <p>Ничего лишнего: запустили, ввели код — и вы уже за другим компьютером.</p>
+      </div>
+      <div class="features">
+        <div class="feat wide reveal">
+          <div>
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg></div>
+            <h3>Прямое соединение</h3>
+            <p>Компьютеры соединяются напрямую — без лишних посредников и задержек. Если прямой путь недоступен, Mirrex автоматически переключится на защищённый сервер, и связь не прервётся.</p>
+          </div>
+        </div>
+        <div class="feat reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+          <h3>Шифрование</h3>
+          <p>Изображение, ввод и файлы передаются в зашифрованном виде.</p>
+        </div>
+        <div class="feat reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3" width="12" height="14" rx="2"/><path d="M4 8v11a2 2 0 0 0 2 2h9"/></svg></div>
+          <h3>Файлы и буфер обмена</h3>
+          <p>Ctrl+C на одном компьютере, Ctrl+V на другом — текст, картинки, файлы и папки.</p>
+        </div>
+        <div class="feat reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></div>
+          <h3>Звук</h3>
+          <p>Слышите всё, что происходит на удалённом компьютере.</p>
+        </div>
+        <div class="feat reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div>
+          <h3>Через интернет и VPN</h3>
+          <p>Разные дома, провайдеры и Wi‑Fi — не проблема. Работает даже с включённым VPN.</p>
+        </div>
+        <div class="feat reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l3 3M15 8l2 2"/></svg></div>
+          <h3>Постоянный пароль</h3>
+          <p>Подключайтесь к своему компьютеру, даже когда за ним никого нет.</p>
+        </div>
+        <div class="feat reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></div>
+          <h3>Автообновление</h3>
+          <p>Новые версии приходят сами — скачивать заново не нужно.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== КАК ЭТО РАБОТАЕТ ===== -->
+  <section class="sec" id="how">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="eyebrow">Как это работает</div>
+        <h2>Три шага до чужого экрана</h2>
+      </div>
+      <div class="steps">
+        <div class="step s1 reveal">
+          <div class="num">1</div>
+          <h3>Установите Mirrex на компьютер‑Хост</h3>
+          <p>Скачайте файл и запустите его двойным щелчком. Программа сразу покажет код для подключения.</p>
+        </div>
+        <div class="step s2 reveal">
+          <div class="num">2</div>
+          <h3>Введите ID и пароль на устройстве‑Госте</h3>
+          <p>Запустите Mirrex на втором компьютере и введите данные, которые сообщил Хост.</p>
+        </div>
+        <div class="step s3 reveal">
+          <div class="num">3</div>
+          <h3>Управляйте рабочим столом как своим</h3>
+          <p>Мышь, клавиатура, файлы, звук. Закончили — нажмите «Завершить сеанс».</p>
+        </div>
+      </div>
+      <div class="roles">
+        <div class="role reveal"><span class="badge">Хост</span><p><strong>Компьютер, к которому подключаются.</strong> Его экран видит Гость. Код доступа меняется после каждого сеанса.</p></div>
+        <div class="role g reveal"><span class="badge">Гость</span><p><strong>Тот, кто подключается и управляет.</strong> Одна и та же программа работает в обеих ролях.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== СКАЧАТЬ ===== -->
+  <section class="sec" id="download">
+    <div class="wrap">
+      <div class="download reveal">
+        <div>
+          <div class="eyebrow">Скачать</div>
+          <h2>Начните за минуту</h2>
+          <p class="sub">Один файл, без установки и регистрации. Запустите — и можно подключаться.</p>
+          <div class="reqs">
+            <span>Windows 10 и 11</span><span>64‑бит</span><span>Без установки</span><span>Автообновление</span>
+          </div>
+          <div class="note">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg>
+            <span>Если Windows покажет окно SmartScreen, нажмите «Подробнее» → «Выполнить в любом случае». Если брандмауэр спросит про доступ к сети — разрешите.</span>
+          </div>
+        </div>
+        <div class="platforms">
+          <div class="plat">
+            <div class="l">
+              <div class="os"><svg viewBox="0 0 24 24"><path d="M3 5.5 10.5 4.5v7H3v-6Zm0 13 7.5 1v-7H3v6Zm8.5 1.2L21 21v-8.5h-9.5v7.2Zm0-15.4v7.2H21V3l-9.5 1.3Z"/></svg></div>
+              <div><b>Windows</b><small class="js-filemeta"></small></div>
+            </div>
+            <a class="btn btn-primary btn-sm js-download" href="#">Скачать .exe</a>
+          </div>
+          <div class="plat soon">
+            <div class="l">
+              <div class="os"><svg viewBox="0 0 24 24"><path d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.8.9-.8 0-2-.9-3.3-.8-1.7 0-3.3 1-4.1 2.5-1.8 3.1-.5 7.6 1.3 10.1.8 1.2 1.8 2.6 3.1 2.5 1.3-.1 1.7-.8 3.2-.8s1.9.8 3.3.8c1.4 0 2.2-1.2 3-2.5.9-1.4 1.3-2.8 1.3-2.8s-2.5-1-2.5-4.2ZM14 5.3c.7-.8 1.2-2 1-3.1-1 0-2.2.7-2.9 1.5-.6.7-1.2 1.9-1 3 1.1.1 2.2-.6 2.9-1.4Z"/></svg></div>
+              <div><b>macOS</b><small>В разработке</small></div>
+            </div>
+            <span class="soon-tag">Скоро</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="sec" id="faq" style="padding-top:24px">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="eyebrow">Вопросы</div>
+        <h2>Частые вопросы</h2>
+      </div>
+      <div class="faq">
+        <details class="reveal"><summary>Нужно ли что-то устанавливать?<span class="pm">+</span></summary>
+          <p>Нет. Mirrex — это один файл .exe. Скачайте его и запустите двойным щелчком. Одна и та же программа работает и как Хост, и как Гость.</p></details>
+        <details class="reveal"><summary>Безопасно ли подключение?<span class="pm">+</span></summary>
+          <p>Все данные передаются в зашифрованном виде. Код доступа меняется после каждого сеанса, а Хост может в любой момент нажать «Завершить сеанс». Сообщайте код только тем, кому доверяете.</p></details>
+        <details class="reveal"><summary>Работает ли через интернет и с VPN?<span class="pm">+</span></summary>
+          <p>Да. Компьютеры могут быть в разных городах, у разных провайдеров и в разных сетях. Подключение работает и тогда, когда у одного из вас включён VPN.</p></details>
+        <details class="reveal"><summary>Как подключаться к своему компьютеру, когда я не дома?<span class="pm">+</span></summary>
+          <p>Задайте на компьютере‑Хосте постоянный пароль на отдельной вкладке программы. Потом подключайтесь с любого другого компьютера, указав этот пароль. Mirrex на Хосте должен быть запущен.</p></details>
+        <details class="reveal"><summary>Windows пишет, что защитила компьютер. Что делать?<span class="pm">+</span></summary>
+          <p>Это стандартное предупреждение SmartScreen для новых программ. Нажмите «Подробнее» → «Выполнить в любом случае».</p></details>
+        <details class="reveal"><summary>Когда появится версия для macOS?<span class="pm">+</span></summary>
+          <p>Версия для Mac уже в разработке. Пока Mirrex доступен только для Windows.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <a href="#top" class="logo">
+      <span class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="4" width="18" height="12" rx="3"/><path d="M12 16v4M8 20h8"/></svg></span>
+      Mirrex
+    </a>
+    <span>© <span class="js-year"></span> Mirrex · Удалённый рабочий стол</span>
+  </div>
+</footer>
+
+<script>
+  /* ====== НАСТРОЙКИ САЙТА ====== */
+  const CONFIG = {
+    downloadUrl: "https://github.com/Mangusstt/mirrex/releases/latest/download/Mirrex.exe", // ссылка на exe
+    version: "версия 1.0",
+    fileSize: "≈ 5 МБ"
+  };
+
+  document.querySelectorAll(".js-download").forEach(a => {
+    a.href = CONFIG.downloadUrl;
+    a.setAttribute("download", "Mirrex.exe");
+  });
+  document.querySelectorAll(".js-version").forEach(el => el.textContent = CONFIG.version);
+  document.querySelectorAll(".js-filemeta").forEach(el => el.textContent = "Windows 10/11 · " + CONFIG.version + " · " + CONFIG.fileSize);
+  document.querySelector(".js-year").textContent = new Date().getFullYear();
+
+  // плавное появление блоков
+  try {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+  } catch (e) {
+    document.querySelectorAll(".reveal").forEach(el => el.classList.add("in"));
+  }
+  // поочерёдное появление карточек в одной сетке
+  document.querySelectorAll(".features,.steps,.roles,.faq").forEach(group => {
+    group.querySelectorAll(".reveal").forEach((el, i) => el.style.transitionDelay = (i * 0.08) + "s");
+  });
+
+  // подсветка за курсором
+  document.querySelectorAll(".feat,.step").forEach(card => {
+    card.addEventListener("pointermove", e => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty("--mx", (e.clientX - r.left) + "px");
+      card.style.setProperty("--my", (e.clientY - r.top) + "px");
+    });
+  });
+
+  // шапка и полоса прогресса
+  const header = document.querySelector("header");
+  const bar = document.querySelector(".progress");
+  const onScroll = () => {
+    const y = window.scrollY;
+    header.classList.toggle("scrolled", y > 10);
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (max > 0 ? (y / max) * 100 : 0) + "%";
+  };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  // лёгкий параллакс иллюстрации за мышью (только на компьютере)
+  const illu = document.querySelector(".illu");
+  if (window.matchMedia("(pointer:fine)").matches && !window.matchMedia("(prefers-reduced-motion:reduce)").matches) {
+    document.querySelector(".hero").addEventListener("pointermove", e => {
+      const x = (e.clientX / window.innerWidth - .5) * 14;
+      const y = (e.clientY / window.innerHeight - .5) * 10;
+      illu.querySelector(".u-host").style.translate = (-x) + "px " + (-y) + "px";
+      illu.querySelector(".u-guest").style.translate = x + "px " + y + "px";
+    });
+  }
+</script>
+</body>
+</html>

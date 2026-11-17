@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mirrex — удалённый рабочий стол</title>
-<meta name="description" content="Mirrex — удалённый доступ к компьютеру: быстро, зашифровано и без сложных настроек. Скачайте для Windows.">
+<meta name="description" content="Mirrex — удалённый доступ к компьютеру и телефону: видео H.264 до 60 к/с, сквозное шифрование, прямое соединение. Windows, веб-версия для телефона, Android.">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -241,6 +241,55 @@
   details p{animation:none}
   details[open] p{animation:up .4s ease forwards;opacity:0;transform:translateY(-6px)}
 
+
+  /* ===== Дополнения v2 ===== */
+  .new{display:inline-block;vertical-align:middle;margin-left:6px;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:700;
+    letter-spacing:.04em;text-transform:uppercase;color:#fff;background:var(--grad)}
+  .stats{position:relative;z-index:1;margin-top:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .stats div{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius);padding:24px 28px}
+  .stats b{display:block;font-size:clamp(30px,3.4vw,44px);font-weight:800;letter-spacing:-.03em;line-height:1.1;
+    background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stats span{color:var(--muted);font-size:15px}
+  .plats{position:relative;z-index:1;display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .pcard{display:flex;flex-direction:column;align-items:flex-start;gap:12px;background:var(--card);border:1px solid var(--line);
+    border-radius:var(--radius);padding:28px;transition:transform .25s,border-color .25s}
+  .pcard:hover{transform:translateY(-4px);border-color:#3A4156}
+  .pcard.soon{opacity:.7}
+  .pc-top{width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .os.big{width:52px;height:52px;border-radius:14px;background:var(--card-2);display:grid;place-items:center}
+  .os.big svg{width:26px;height:26px;fill:var(--text)}
+  .st{font-size:12px;font-weight:700;padding:5px 12px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+  .st.ok{color:#3DDC97;border-color:rgba(61,220,151,.35);background:rgba(61,220,151,.08)}
+  .pcard h3{font-size:21px;font-weight:700;letter-spacing:-.02em}
+  .pcard p{color:var(--muted);font-size:15px;flex:1}
+  .pcard .btn,.pcard .soon-tag{margin-top:8px}
+  .secblock{position:relative;z-index:1;border-radius:32px;padding:64px;border:1px solid var(--line);overflow:hidden;
+    background:radial-gradient(90% 120% at 0% 0%,#1E2A4A 0%,transparent 55%),radial-gradient(80% 120% at 100% 100%,#2A1F4A 0%,transparent 60%),var(--card)}
+  .secgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .sitem{background:rgba(14,16,21,.55);border:1px solid var(--line);border-radius:var(--radius);padding:26px;position:relative;overflow:hidden;transition:transform .25s,border-color .25s}
+  .sitem:hover{transform:translateY(-4px);border-color:#3A4156}
+  .sitem h3{font-size:18px;font-weight:700;margin-bottom:8px}
+  .sitem p{color:var(--muted);font-size:15px}
+  .sitem::before{content:"";position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none;
+    background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%),rgba(110,116,248,.16),transparent 60%)}
+  .sitem:hover::before{opacity:1}
+  .sitem > *{position:relative}
+  .os svg.stroke,.os.big svg.stroke{fill:none}
+  .link{color:#8FB3FF;border-bottom:1px solid rgba(143,179,255,.35)}
+  .link:hover{color:#fff}
+  @media (max-width:1024px){
+    .plats{grid-template-columns:repeat(2,1fr)}
+    .secgrid{grid-template-columns:repeat(2,1fr)}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .secblock{padding:44px}
+  }
+  @media (max-width:560px){
+    .plats,.secgrid{grid-template-columns:1fr}
+    .secblock{padding:30px 22px;border-radius:24px}
+    .stats div{padding:18px 20px}
+    .pcard .btn{width:100%}
+  }
+
   /* ===== Адаптив ===== */
   @media (max-width:1024px){
     .features{grid-template-columns:repeat(2,1fr)}
@@ -297,7 +346,8 @@
     </a>
     <nav class="nav-links">
       <a href="#features">Возможности</a>
-      <a href="#how">Как это работает</a>
+      <a href="#platforms">Платформы</a>
+      <a href="#security">Безопасность</a>
       <a href="#faq">Вопросы</a>
     </nav>
     <a href="#download" class="btn btn-primary btn-sm">Скачать</a>
@@ -309,7 +359,7 @@
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
-        <span class="pill anim a1"><span class="dot"></span>Удалённый рабочий стол</span>
+        <span class="pill anim a1"><span class="dot"></span>Удалённый рабочий стол · теперь и на телефоне</span>
         <h1 class="anim a2">Ваш рабочий стол — <span class="grad-text">там, где вы</span></h1>
         <p class="lead anim a3">Подключайтесь к своему компьютеру из любой точки: быстро, зашифровано и без сложных настроек.</p>
         <div class="cta-row anim a4">
@@ -319,7 +369,7 @@
           </a>
           <a class="btn btn-ghost btn-lg" href="#how">Как это работает</a>
         </div>
-        <p class="cta-meta anim a5">Windows 10 / 11 · <span class="js-version"></span> · установка не нужна</p>
+        <p class="cta-meta anim a5">Windows 10 / 11 · <span class="js-version"></span> · установка не нужна · с телефона — <a class="js-web link" href="#">через браузер</a></p>
       </div>
 
       <div class="illu anim" aria-hidden="true" style="opacity:0">
@@ -351,45 +401,135 @@
       <div class="sec-head reveal">
         <div class="eyebrow">Возможности</div>
         <h2>Всё, что нужно для работы на расстоянии</h2>
-        <p>Ничего лишнего: запустили, ввели код — и вы уже за другим компьютером.</p>
+        <p>Ничего лишнего: запустили, ввели ID и пароль — и вы уже за другим компьютером.</p>
       </div>
       <div class="features">
         <div class="feat wide reveal">
           <div>
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m10 9 5 3-5 3V9Z"/></svg></div>
+            <h3>Видео H.264 до 60 кадров/с</h3>
+            <p>Экран сжимается встроенным в Windows кодеком H.264: картинка плавная, а трафика уходит меньше. Курсор передаётся отдельно, поэтому двигается без задержки. На неподвижном экране программа не тратит канал впустую.</p>
+          </div>
+        </div>
+        <div class="feat wide reveal">
+          <div>
             <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg></div>
             <h3>Прямое соединение</h3>
-            <p>Компьютеры соединяются напрямую — без лишних посредников и задержек. Если прямой путь недоступен, Mirrex автоматически переключится на защищённый сервер, и связь не прервётся.</p>
+            <p>Компьютеры соединяются напрямую, видео может идти по UDP. Если прямой путь закрыт, Mirrex незаметно переключится на сервер-посредник. Сервер слушает сразу несколько портов, поэтому связь проходит даже там, где VPN или провайдер режут отдельные порты.</p>
           </div>
         </div>
         <div class="feat reveal">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
-          <h3>Шифрование</h3>
-          <p>Изображение, ввод и файлы передаются в зашифрованном виде.</p>
+          <h3>Сквозное шифрование</h3>
+          <p>X25519 + XChaCha20‑Poly1305. Сервер-посредник видит только шифртекст.</p>
         </div>
+
         <div class="feat reveal">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3" width="12" height="14" rx="2"/><path d="M4 8v11a2 2 0 0 0 2 2h9"/></svg></div>
           <h3>Файлы и буфер обмена</h3>
-          <p>Ctrl+C на одном компьютере, Ctrl+V на другом — текст, картинки, файлы и папки.</p>
+          <p>Ctrl+C на одном компьютере, Ctrl+V на другом: текст, картинки, файлы и папки до 500 МБ.</p>
         </div>
+
         <div class="feat reveal">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></div>
           <h3>Звук</h3>
-          <p>Слышите всё, что происходит на удалённом компьютере.</p>
+          <p>Слышите всё, что происходит на удалённом компьютере. Передачу звука можно выключить.</p>
         </div>
+
         <div class="feat reveal">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div>
-          <h3>Через интернет и VPN</h3>
-          <p>Разные дома, провайдеры и Wi‑Fi — не проблема. Работает даже с включённым VPN.</p>
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-1a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v1"/><circle cx="9.5" cy="8" r="3.5"/><circle cx="19" cy="9" r="2" fill="#3DDC97" stroke="none"/></svg></div>
+          <h3>Адресная книга <span class="new">новое</span></h3>
+          <p>Ваши компьютеры с именами. Зелёная точка — компьютер в сети, вход в один клик.</p>
         </div>
+
         <div class="feat reveal">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l3 3M15 8l2 2"/></svg></div>
-          <h3>Постоянный пароль</h3>
-          <p>Подключайтесь к своему компьютеру, даже когда за ним никого нет.</p>
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5" fill="#F25F7A" stroke="none"/></svg></div>
+          <h3>Запись сеансов <span class="new">новое</span></h3>
+          <p>Кнопка «Запись» или автоматическая запись каждого сеанса в MP4.</p>
+        </div>
+
+        <div class="feat reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <h3>Только просмотр <span class="new">новое</span></h3>
+          <p>Гость видит экран, но не управляет. Удобно для показа и консультаций.</p>
+        </div>
+
+        <div class="feat reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="12" height="9" rx="2"/><rect x="10" y="9" width="12" height="9" rx="2"/></svg></div>
+          <h3>Несколько мониторов <span class="new">новое</span></h3>
+          <p>Переключайтесь между экранами Хоста прямо из окна сеанса.</p>
+        </div>
+
+        <div class="feat reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2.5"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/></svg></div>
+          <h3>Горячие клавиши <span class="new">новое</span></h3>
+          <p>Сочетания клавиш уходят на удалённый компьютер. Ctrl+Alt+End — это Ctrl+Alt+Del на Хосте.</p>
+        </div>
+
+        <div class="feat reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg></div>
+          <h3>Автопереподключение</h3>
+          <p>Связь мигнула — Mirrex сам восстановит сеанс, ничего нажимать не нужно.</p>
+        </div>
+
+        <div class="feat reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15h4l2 3h4l2-3h4"/><path d="M4 15V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3"/></svg></div>
+          <h3>Трей и автозапуск</h3>
+          <p>Работает в фоне и стартует вместе с Windows: к компьютеру можно подключиться в любой момент.</p>
         </div>
         <div class="feat reveal">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></div>
           <h3>Автообновление</h3>
-          <p>Новые версии приходят сами — скачивать заново не нужно.</p>
+          <p>Новые версии приходят сами и ставятся между сеансами — скачивать заново не нужно.</p>
+        </div>
+        <div class="feat reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M6 16v-4M11 16V8M16 16v-6M21 16V5"/></svg></div>
+          <h3>Пинг и скорость</h3>
+          <p>В окне сеанса видно задержку, кадры в секунду и скорость канала — сразу понятно, как идёт связь.</p>
+        </div>
+
+      </div>
+      <div class="stats reveal">
+        <div><b>60</b><span>кадров в секунду</span></div>
+        <div><b>H.264</b><span>сжатие видео</span></div>
+        <div><b>256 бит</b><span>ключи шифрования</span></div>
+        <div><b>3</b><span>платформы уже работают</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ПЛАТФОРМЫ ===== -->
+  <section class="sec" id="platforms">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="eyebrow">Платформы</div>
+        <h2>Компьютер, телефон — откуда угодно</h2>
+        <p>Подключайтесь к компьютеру с телефона прямо из браузера, а к телефону на Android — с любого устройства.</p>
+      </div>
+      <div class="plats">
+        <div class="pcard reveal">
+          <div class="pc-top"><div class="os big"><svg viewBox="0 0 24 24"><path d="M3 5.5 10.5 4.5v7H3v-6Zm0 13 7.5 1v-7H3v6Zm8.5 1.2L21 21v-8.5h-9.5v7.2Zm0-15.4v7.2H21V3l-9.5 1.3Z"/></svg></div><span class="st ok">Доступно</span></div>
+          <h3>Windows</h3>
+          <p>Полная версия: Хост и Гость в одной программе. Один файл, обновляется сама.</p>
+          <a class="btn btn-primary btn-sm js-download" href="#">Скачать .exe</a>
+        </div>
+        <div class="pcard reveal">
+          <div class="pc-top"><div class="os big"><svg class="stroke" viewBox="0 0 24 24" fill="none" stroke="#EEF0F5" stroke-width="2" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg></div><span class="st ok">Доступно</span></div>
+          <h3>Телефон → ПК</h3>
+          <p>Веб-версия: откройте ссылку в браузере, введите ID и пароль. Ничего устанавливать не нужно. Жесты, клавиатура, буфер обмена.</p>
+          <a class="btn btn-ghost btn-sm js-web" href="#">Открыть веб-версию</a>
+        </div>
+        <div class="pcard reveal">
+          <div class="pc-top"><div class="os big"><svg viewBox="0 0 24 24"><path d="M7.2 9h9.6a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H16V20a1.3 1.3 0 0 1-2.6 0v-2.5h-2.8V20A1.3 1.3 0 0 1 8 20v-2.5h-.8a1 1 0 0 1-1-1V10a1 1 0 0 1 1-1Zm-2.9.2a1.3 1.3 0 0 1 1.3 1.3v4.6a1.3 1.3 0 0 1-2.6 0v-4.6a1.3 1.3 0 0 1 1.3-1.3Zm15.4 0a1.3 1.3 0 0 1 1.3 1.3v4.6a1.3 1.3 0 0 1-2.6 0v-4.6a1.3 1.3 0 0 1 1.3-1.3ZM15.6 3.2l1-1.6M8.4 3.2l-1-1.6M6.3 8.2a5.7 5.7 0 0 1 11.4 0Z"/></svg></div><span class="st ok">Новое</span></div>
+          <h3>Android</h3>
+          <p>Приложение делает телефон доступным для подключения: экран и управление касаниями, кнопки «Назад», «Домой», ввод текста. Android 9+.</p>
+          <a class="btn btn-ghost btn-sm js-android" href="#">Скачать APK</a>
+        </div>
+        <div class="pcard soon reveal">
+          <div class="pc-top"><div class="os big"><svg viewBox="0 0 24 24"><path d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.8.9-.8 0-2-.9-3.3-.8-1.7 0-3.3 1-4.1 2.5-1.8 3.1-.5 7.6 1.3 10.1.8 1.2 1.8 2.6 3.1 2.5 1.3-.1 1.7-.8 3.2-.8s1.9.8 3.3.8c1.4 0 2.2-1.2 3-2.5.9-1.4 1.3-2.8 1.3-2.8s-2.5-1-2.5-4.2ZM14 5.3c.7-.8 1.2-2 1-3.1-1 0-2.2.7-2.9 1.5-.6.7-1.2 1.9-1 3 1.1.1 2.2-.6 2.9-1.4Z"/></svg></div><span class="st">Скоро</span></div>
+          <h3>macOS</h3>
+          <p>Версия для Mac в разработке: соединение с Windows уже работает, переносим остальные функции.</p>
+          <span class="soon-tag">В разработке</span>
         </div>
       </div>
     </div>
@@ -411,7 +551,7 @@
         <div class="step s2 reveal">
           <div class="num">2</div>
           <h3>Введите ID и пароль на устройстве‑Госте</h3>
-          <p>Запустите Mirrex на втором компьютере и введите данные, которые сообщил Хост.</p>
+          <p>Запустите Mirrex на втором компьютере или откройте веб-версию на телефоне и введите ID (9 цифр) и пароль.</p>
         </div>
         <div class="step s3 reveal">
           <div class="num">3</div>
@@ -426,6 +566,57 @@
     </div>
   </section>
 
+  <!-- ===== БЕЗОПАСНОСТЬ ===== -->
+  <section class="sec" id="security">
+    <div class="wrap">
+      <div class="secblock reveal">
+        <div class="sec-head" style="margin-bottom:40px">
+          <div class="eyebrow">Безопасность</div>
+          <h2>Ваш экран видите только вы и тот, кого вы пустили</h2>
+          <p>Защита встроена в каждое соединение, обновление и в сам сервер — её не нужно включать.</p>
+        </div>
+        <div class="secgrid">
+        <div class="sitem reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+          <h3>Сквозное шифрование</h3>
+          <p>Каждый сеанс шифруется по X25519 + XChaCha20‑Poly1305. Код или пароль входит в ключ: без него соединение просто не установится, а сервер-посредник видит только шифртекст.</p>
+        </div>
+
+        <div class="sitem reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5a2 2 0 0 1 4 0v6M13 10V4a2 2 0 0 1 4 0v8M9 11a2 2 0 0 0-4 0v3a7 7 0 0 0 14 0v-4a2 2 0 0 0-4 0"/></svg></div>
+          <h3>Вход под вашим контролем</h3>
+          <p>По разовому коду Хост сам решает, пустить ли гостя. Код меняется после каждого сеанса. Есть доверенные гости, режим «только просмотр» и постоянный пароль от 6 символов.</p>
+        </div>
+
+        <div class="sitem reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="m14 4 4 4-9 9H5v-4l9-9Z"/></svg></div>
+          <h3>Подписанные обновления</h3>
+          <p>Каждое обновление подписано ключом Ed25519. Программа проверяет подпись перед установкой, поэтому подменить обновление невозможно.</p>
+        </div>
+
+        <div class="sitem reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/></svg></div>
+          <h3>Защищённый сервер</h3>
+          <p>HTTPS со строгой политикой безопасности, ограничение попыток входа и защита от перебора и флуда. Лимиты не режут скорость и качество видео.</p>
+        </div>
+
+        <div class="sitem reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg></div>
+          <h3>Защита от подбора</h3>
+          <p>На Android после 5 неверных кодов подряд приём подключений приостанавливается. «Новый код» сразу отменяет старый.</p>
+        </div>
+
+        <div class="sitem reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <h3>Всё на виду</h3>
+          <p>На Хосте всегда видно, что идёт сеанс и кто подключён. Кнопка «Завершить сеанс» отключает гостя мгновенно.</p>
+        </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== СКАЧАТЬ ===== -->
   <section class="sec" id="download">
     <div class="wrap">
@@ -433,9 +624,9 @@
         <div>
           <div class="eyebrow">Скачать</div>
           <h2>Начните за минуту</h2>
-          <p class="sub">Один файл, без установки и регистрации. Запустите — и можно подключаться.</p>
+          <p class="sub">Один файл, без установки и регистрации. Запустите — и можно подключаться. С телефона — прямо из браузера.</p>
           <div class="reqs">
-            <span>Windows 10 и 11</span><span>64‑бит</span><span>Без установки</span><span>Автообновление</span>
+            <span>Windows 10 и 11</span><span>64‑бит</span><span>Без установки</span><span>Подписанные обновления</span><span>Android 9+</span>
           </div>
           <div class="note">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg>
@@ -450,10 +641,24 @@
             </div>
             <a class="btn btn-primary btn-sm js-download" href="#">Скачать .exe</a>
           </div>
+          <div class="plat">
+            <div class="l">
+              <div class="os"><svg class="stroke" viewBox="0 0 24 24" fill="none" stroke="#EEF0F5" stroke-width="2" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg></div>
+              <div><b>Телефон → ПК</b><small>Веб-версия, без установки</small></div>
+            </div>
+            <a class="btn btn-ghost btn-sm js-web" href="#">Открыть</a>
+          </div>
+          <div class="plat">
+            <div class="l">
+              <div class="os"><svg viewBox="0 0 24 24"><path d="M7.2 9h9.6a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H16V20a1.3 1.3 0 0 1-2.6 0v-2.5h-2.8V20A1.3 1.3 0 0 1 8 20v-2.5h-.8a1 1 0 0 1-1-1V10a1 1 0 0 1 1-1Zm-2.9.2a1.3 1.3 0 0 1 1.3 1.3v4.6a1.3 1.3 0 0 1-2.6 0v-4.6a1.3 1.3 0 0 1 1.3-1.3Zm15.4 0a1.3 1.3 0 0 1 1.3 1.3v4.6a1.3 1.3 0 0 1-2.6 0v-4.6a1.3 1.3 0 0 1 1.3-1.3ZM6.3 8.2a5.7 5.7 0 0 1 11.4 0Z"/></svg></div>
+              <div><b>Android</b><small>Подключение к телефону · Android 9+</small></div>
+            </div>
+            <a class="btn btn-ghost btn-sm js-android" href="#">Скачать APK</a>
+          </div>
           <div class="plat soon">
             <div class="l">
               <div class="os"><svg viewBox="0 0 24 24"><path d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.8.9-.8 0-2-.9-3.3-.8-1.7 0-3.3 1-4.1 2.5-1.8 3.1-.5 7.6 1.3 10.1.8 1.2 1.8 2.6 3.1 2.5 1.3-.1 1.7-.8 3.2-.8s1.9.8 3.3.8c1.4 0 2.2-1.2 3-2.5.9-1.4 1.3-2.8 1.3-2.8s-2.5-1-2.5-4.2ZM14 5.3c.7-.8 1.2-2 1-3.1-1 0-2.2.7-2.9 1.5-.6.7-1.2 1.9-1 3 1.1.1 2.2-.6 2.9-1.4Z"/></svg></div>
-              <div><b>macOS</b><small>В разработке</small></div>
+              <div><b>macOS</b><small>В разработке · связь с Windows уже работает</small></div>
             </div>
             <span class="soon-tag">Скоро</span>
           </div>
@@ -473,7 +678,7 @@
         <details class="reveal"><summary>Нужно ли что-то устанавливать?<span class="pm">+</span></summary>
           <p>Нет. Mirrex — это один файл .exe. Скачайте его и запустите двойным щелчком. Одна и та же программа работает и как Хост, и как Гость.</p></details>
         <details class="reveal"><summary>Безопасно ли подключение?<span class="pm">+</span></summary>
-          <p>Все данные передаются в зашифрованном виде. Код доступа меняется после каждого сеанса, а Хост может в любой момент нажать «Завершить сеанс». Сообщайте код только тем, кому доверяете.</p></details>
+          <p>Да. Соединение шифруется по X25519 + XChaCha20‑Poly1305, а код или пароль входит в ключ шифрования: без него подключиться нельзя, а сервер-посредник видит только зашифрованные данные. Код меняется после каждого сеанса, по коду Хост сам подтверждает вход, а «Завершить сеанс» отключает гостя мгновенно. Не публикуйте свой ID и постоянный пароль.</p></details>
         <details class="reveal"><summary>Работает ли через интернет и с VPN?<span class="pm">+</span></summary>
           <p>Да. Компьютеры могут быть в разных городах, у разных провайдеров и в разных сетях. Подключение работает и тогда, когда у одного из вас включён VPN.</p></details>
         <details class="reveal"><summary>Как подключаться к своему компьютеру, когда я не дома?<span class="pm">+</span></summary>
@@ -481,7 +686,15 @@
         <details class="reveal"><summary>Windows пишет, что защитила компьютер. Что делать?<span class="pm">+</span></summary>
           <p>Это стандартное предупреждение SmartScreen для новых программ. Нажмите «Подробнее» → «Выполнить в любом случае».</p></details>
         <details class="reveal"><summary>Когда появится версия для macOS?<span class="pm">+</span></summary>
-          <p>Версия для Mac уже в разработке. Пока Mirrex доступен только для Windows.</p></details>
+          <p>Версия для Mac уже в разработке: соединение с Windows работает, сейчас переносим остальные функции. Пока полная версия есть для Windows, плюс веб-версия для телефона и приложение для Android.</p></details>
+        <details class="reveal"><summary>Можно ли подключиться к компьютеру с телефона?<span class="pm">+</span></summary>
+          <p>Да, через веб-версию: откройте ссылку в браузере телефона, введите ID компьютера и пароль. Тап — клик, долгое нажатие — правый клик, два пальца — увеличение, три пальца — клавиатура. Совет: добавьте страницу на экран «Домой» — она будет открываться как приложение. Если на телефоне включён VPN, пинг вырастет, поэтому для работы его лучше выключить.</p></details>
+        <details class="reveal"><summary>Можно ли подключиться к телефону?<span class="pm">+</span></summary>
+          <p>Да, к телефонам на Android 9 и новее. Установите на него приложение Mirrex, нажмите «Разрешить подключение», а для управления — «Включить управление». Подключаться можно с любого телефона или компьютера через веб-версию. Звук, буфер обмена и файлы на Android пока не поддерживаются, а банковские приложения могут показываться чёрным экраном — это ограничение Android.</p></details>
+        <details class="reveal"><summary>Как обновляется программа и можно ли подменить обновление?<span class="pm">+</span></summary>
+          <p>Mirrex сам проверяет новую версию, скачивает её и перезапускается, но никогда во время сеанса. Каждое обновление подписано ключом Ed25519, и программа устанавливает его, только если подпись верна. Текущая версия видна в главном окне.</p></details>
+        <details class="reveal"><summary>Можно ли записать сеанс?<span class="pm">+</span></summary>
+          <p>Да. Нажмите «Запись» на панели в окне сеанса или включите «Записывать каждый сеанс» в Настройках → Сеанс. Видео в формате MP4 сохраняется в папку «Видео\Mirrex».</p></details>
       </div>
     </div>
   </section>
@@ -501,6 +714,8 @@
   /* ====== НАСТРОЙКИ САЙТА ====== */
   const CONFIG = {
     downloadUrl: "https://github.com/Mangusstt/mirrex/releases/latest/download/Mirrex.exe", // ссылка на exe
+    webUrl: "https://194-226-54-111.sslip.io:8443",  // веб-версия для телефона
+    androidUrl: "https://github.com/Mangusstt/mirrex/releases/latest/download/Mirrex.apk", // пусто "" — кнопка станет «Скоро»
     version: "версия 1.0",
     fileSize: "≈ 5 МБ"
   };
@@ -508,6 +723,11 @@
   document.querySelectorAll(".js-download").forEach(a => {
     a.href = CONFIG.downloadUrl;
     a.setAttribute("download", "Mirrex.exe");
+  });
+  document.querySelectorAll(".js-web").forEach(a => { a.href = CONFIG.webUrl; a.target = "_blank"; a.rel = "noopener"; });
+  document.querySelectorAll(".js-android").forEach(a => {
+    if (CONFIG.androidUrl) { a.href = CONFIG.androidUrl; }
+    else { const t = document.createElement("span"); t.className = "soon-tag"; t.textContent = "Скоро"; a.replaceWith(t); }
   });
   document.querySelectorAll(".js-version").forEach(el => el.textContent = CONFIG.version);
   document.querySelectorAll(".js-filemeta").forEach(el => el.textContent = "Windows 10/11 · " + CONFIG.version + " · " + CONFIG.fileSize);
@@ -523,12 +743,12 @@
     document.querySelectorAll(".reveal").forEach(el => el.classList.add("in"));
   }
   // поочерёдное появление карточек в одной сетке
-  document.querySelectorAll(".features,.steps,.roles,.faq").forEach(group => {
+  document.querySelectorAll(".features,.steps,.roles,.faq,.plats,.secgrid").forEach(group => {
     group.querySelectorAll(".reveal").forEach((el, i) => el.style.transitionDelay = (i * 0.08) + "s");
   });
 
   // подсветка за курсором
-  document.querySelectorAll(".feat,.step").forEach(card => {
+  document.querySelectorAll(".feat,.step,.sitem").forEach(card => {
     card.addEventListener("pointermove", e => {
       const r = card.getBoundingClientRect();
       card.style.setProperty("--mx", (e.clientX - r.left) + "px");
